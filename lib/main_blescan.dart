@@ -136,7 +136,7 @@ class _HomePageState extends State<HomeScanPage>
         EasyLoading.show(status: 'syncing');
         checkPwd();
         // bleMethodChannel.invokeMethod('checkPassword', {'password': password});
-      }else{
+      } else {
         //跳转页面
         Navigator.pushNamed(context, 'deviceInfo');
       }
@@ -147,7 +147,7 @@ class _HomePageState extends State<HomeScanPage>
     }
   }
 
-  void checkPwd() async{
+  void checkPwd() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     bleMethodChannel.invokeMethod('checkPassword', {'password': password});
   }
@@ -290,85 +290,184 @@ class _HomePageState extends State<HomeScanPage>
       elevation: 6,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          const Padding(padding: EdgeInsets.only(left: 5)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          Row(
             children: [
-              const Padding(padding: EdgeInsets.only(top: 15)),
-              const Image(
-                image: AssetImage('images/rssi.png'),
-                width: 30,
-                height: 12,
+              Column(
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 15)),
+                  const Image(
+                    image: AssetImage('images/rssi.png'),
+                    width: 30,
+                    height: 12,
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 8)),
+                  Text(
+                    '${infoBean.rssi}dBm',
+                    style:
+                        const TextStyle(fontSize: 13, color: Color(0xff666666)),
+                  )
+                ],
               ),
-              const Padding(padding: EdgeInsets.only(top: 8)),
+              const Padding(padding: EdgeInsets.only(left: 15)),
               Text(
-                '${infoBean.rssi}dBm',
-                style: const TextStyle(fontSize: 13, color: Color(0xff666666)),
+                infoBean.name ?? "NA",
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              const Padding(padding: EdgeInsets.only(top: 10)),
+              const Expanded(child: Text('')),
+              GestureDetector(
+                onTap: () {
+                  connect(infoBean);
+                },
+                child: Container(
+                  width: 90,
+                  height: 35,
+                  margin: const EdgeInsets.only(top: 20),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    color: Color(0xff2f84d0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: const Text(
+                    'CONNECT',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
               const Image(
                 image: AssetImage('images/battery_1.png'),
                 width: 30,
                 height: 14,
                 fit: BoxFit.cover,
               ),
-              const Padding(padding: EdgeInsets.only(top: 40)),
+              const Padding(padding: EdgeInsets.only(left: 15)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 18)),
+                  Text(
+                    infoBean.name ?? "NA",
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  Text(
+                    'MAC:${infoBean.mac}',
+                    style:
+                        const TextStyle(fontSize: 14, color: Color(0xff666666)),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 6)),
+                  Text(
+                    'Device ID：${infoBean.deviceId}',
+                    style:
+                        const TextStyle(fontSize: 11, color: Color(0xff666666)),
+                  ),
+                ],
+              ),
             ],
           ),
-          const Padding(padding: EdgeInsets.only(left: 15)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+          const Padding(padding: EdgeInsets.only(top: 6)),
+          Row(
             children: [
-              const Padding(padding: EdgeInsets.only(top: 18)),
               Text(
-                infoBean.name ?? "NA",
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                '${infoBean.battery}mV',
+                style: const TextStyle(fontSize: 10, color: Color(0xff666666)),
               ),
-              const Padding(padding: EdgeInsets.only(top: 10)),
               Text(
-                'MAC:${infoBean.mac}',
-                style: const TextStyle(fontSize: 14, color: Color(0xff666666)),
+                '  TxPower:${infoBean.txPower}dBm',
+                style: const TextStyle(fontSize: 10, color: Color(0xff666666)),
               ),
-              const Padding(padding: EdgeInsets.only(top: 6)),
+              const Expanded(child: Padding(padding: EdgeInsets.zero)),
               Text(
-                'Device ID：${infoBean.deviceId}',
-                style: const TextStyle(fontSize: 11, color: Color(0xff666666)),
+                '<->${infoBean.intervalTime}ms',
+                style: const TextStyle(fontSize: 10, color: Color(0xff666666)),
               ),
             ],
           ),
-          const Expanded(child: Text('')),
-          GestureDetector(
-            onTap: () {
-              connect(infoBean);
-            },
-            child: Container(
-              width: 90,
-              height: 35,
-              margin: const EdgeInsets.only(top: 20),
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: Color(0xff2f84d0),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20),
-                ),
-              ),
-              child: const Text(
-                'CONNECT',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          const Padding(padding: EdgeInsets.only(left: 5)),
+          const Padding(padding: EdgeInsets.only(top: 8)),
+          const Divider(height: 1, color: Color(0xffb3b3b3)),
+          _advInfoItem(infoBean),
         ],
       ),
+    );
+  }
+
+  Widget _advInfoItem(DeviceInfoBean infoBean) {
+    var dataBytes = infoBean.triggerData?.dataBytes;
+    if (dataBytes?.isNotEmpty == true) {
+      return ListView.builder(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(0),
+          itemCount: dataBytes!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _listItem(deviceList[index]);
+          });
+    } else {
+      return const Padding(padding: EdgeInsets.zero);
+    }
+  }
+
+  Widget _listAdvInfo(DeviceInfoBean infoBean) {
+    return Column(
+      children: [
+        const Padding(padding: EdgeInsets.only(top: 10)),
+        Row(
+          children: [
+            Image.asset('images/blue_arrows.png',
+                width: 5, height: 5, fit: BoxFit.cover),
+            const Padding(padding: EdgeInsets.only(left: 10)),
+            const Text(
+              'Long press alarm mode',
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xff333333),
+                  fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        const Padding(padding: EdgeInsets.only(top: 5)),
+        Row(
+          children: [
+            const Padding(padding: EdgeInsets.only(left: 25)),
+            const Text(
+              'Trigger status',
+              style: TextStyle(fontSize: 12, color: Color(0xff999999)),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 30)),
+            const Text(
+              'Standby',
+              style: TextStyle(fontSize: 12, color: Color(0xff666666)),
+            )
+          ],
+        ),
+        const Padding(padding: EdgeInsets.only(top: 5)),
+        Row(
+          children: [
+            const Padding(padding: EdgeInsets.only(left: 25)),
+            const Text(
+              'Trigger count',
+              style: TextStyle(fontSize: 12, color: Color(0xff999999)),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 30)),
+            const Text(
+              '0',
+              style: TextStyle(fontSize: 12, color: Color(0xff666666)),
+            )
+          ],
+        ),
+      ],
     );
   }
 
@@ -387,7 +486,7 @@ class _HomePageState extends State<HomeScanPage>
       password = result;
       EasyLoading.show();
       bleMethodChannel.invokeMethod('bleConnect', {'macAddress': infoBean.mac});
-    }else{
+    } else {
       EasyLoading.show();
       bleMethodChannel.invokeMethod('bleConnect', {'macAddress': infoBean.mac});
     }

@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 
 import com.moko.support.d.DMokoSupport;
 import com.moko.support.d.MokoBleScanner;
+import com.moko.support.d.OrderTaskAssembler;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -24,5 +25,8 @@ public class MainActivity extends FlutterActivity {
 
         mokoSupport.createEventChannel(flutterEngine);
         mokoSupport.createMethodChannel(flutterEngine);
+
+        OrderTaskAssembler orderTaskAssembler = new OrderTaskAssembler();
+        orderTaskAssembler.createMethodChannel(flutterEngine);
     }
 }

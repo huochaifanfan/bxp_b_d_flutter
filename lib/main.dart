@@ -22,9 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        'scan': (context) => const ScanMainPage(),
-      },
       home: const MyHomePage(),
       builder: EasyLoading.init(),
     );
@@ -82,11 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
         if (storageStatus.isPermanentlyDenied ||
             locationStatus.isPermanentlyDenied) {
           content =
-              'Please find it in cellphone setting- permission, and allow MK Button CR use the Storage and location permission';
+          'Please find it in cellphone setting- permission, and allow MK Button CR use the Storage and location permission';
           isNeverAsk = true;
         } else {
           content =
-              'MK Button D requires access to Storage and location permission. If the permissions are not on, MK Button D cannot be used normally.';
+          'MK Button D requires access to Storage and location permission. If the permissions are not on, MK Button D cannot be used normally.';
         }
         _showDialog(content, isNeverAsk);
       }
@@ -100,11 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
         var content = "";
         if (locationStatus.isPermanentlyDenied) {
           content =
-              '>Please find it in cellphone setting- permission, and allow MK Button CR use the Location permission';
+          '>Please find it in cellphone setting- permission, and allow MK Button CR use the Location permission';
           isNeverAsk = true;
         } else {
           content =
-              'MK Button CR requires access to Location permission. If the permissions are not on, MK Button CR cannot be used normally.';
+          'MK Button CR requires access to Location permission. If the permissions are not on, MK Button CR cannot be used normally.';
         }
         _showDialog(content, isNeverAsk);
       }
@@ -122,11 +119,11 @@ class _MyHomePageState extends State<MyHomePage> {
             bleScanStatus.isPermanentlyDenied ||
             bleConnectStatus.isPermanentlyDenied) {
           content =
-              'Please find it in cellphone setting- permission, and allow MK Button CR use the bluetooth and location permission';
+          'Please find it in cellphone setting- permission, and allow MK Button CR use the bluetooth and location permission';
           isNeverAsk = true;
         } else {
           content =
-              'MK Button CR requires access to bluetooth scan contract and location permission. If the permissions are not on, MK Button CR cannot be used normally.';
+          'MK Button CR requires access to bluetooth scan contract and location permission. If the permissions are not on, MK Button CR cannot be used normally.';
         }
         _showDialog(content, isNeverAsk);
       }
@@ -181,6 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _gotoMain() {
-    Navigator.pushNamed(context, 'scan', arguments: (route) => route == null);
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:
+        (context) => const ScanMainPage()), (route) => false);
   }
 }

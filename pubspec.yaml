@@ -83,6 +83,7 @@ flutter:
     - images/device_unchecked.png
     - images/arrow_right.png
     - images/save.png
+    - images/blue_arrows.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
